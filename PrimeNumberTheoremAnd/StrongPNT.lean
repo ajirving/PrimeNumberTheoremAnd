@@ -2457,7 +2457,7 @@ lemma SumBoundII :
       add_zero, mul_comm, add_comm]
   set Z : ℂ := z.re - 3 / 2 with hZ
   have hZ' : Z ∈ Metric.closedBall (0 : ℂ) r' \ SetOfZeros R' f := by
-    simp only [SetOfZeros, f, Set.mem_sdiff, Metric.mem_closedBall, dist_zero_right, mem_setOf_eq,
+    simp only [SetOfZeros, f, Set.mem_sdiff, Metric.mem_closedBall, dist_zero_right, mem_ofPred_eq,
       not_and, hZ]
     ring_nf
     refine ⟨?_, fun _ => ?_⟩
@@ -2481,11 +2481,11 @@ lemma SumBoundII :
     refine Finset.sum_nbij' (fun ρ => ρ - (3 / 2 + I * t)) (fun ρ => ρ + (3 / 2 + I * t))
       (fun ρ hρ => ?_) (fun ρ hρ => ?_) (fun ρ hρ => by ring_nf) (fun ρ hρ => by ring_nf)
       (fun ρ hρ => ?_)
-    · simp only [Set.Finite.mem_toFinset, SetOfZeros, ZeroWindow, Set.mem_setOf_eq] at hρ ⊢
+    · simp only [Set.Finite.mem_toFinset, SetOfZeros, ZeroWindow, Set.mem_ofPred_eq] at hρ ⊢
       refine ⟨?_, ?_⟩
       · simp only [r, hρ.2]
       · simp only [add_assoc, sub_add_cancel, hρ.1]
-    · simp only [Set.Finite.mem_toFinset, SetOfZeros, ZeroWindow, Set.mem_setOf_eq] at hρ ⊢
+    · simp only [Set.Finite.mem_toFinset, SetOfZeros, ZeroWindow, Set.mem_ofPred_eq] at hρ ⊢
       refine ⟨?_, ?_⟩
       · simp only [← add_assoc, hρ.2]
       · simp only [add_sub_cancel_right, r, hρ.1]
@@ -2521,7 +2521,7 @@ lemma GapSize (t : ℝ) (ht : |t| ≥ 3)
     (z : ℂ) (hzRe : z.re ∈ Icc (1 - DeltaT t / 3) (3 / 2))
     (ρ : ℂ) (hρ : ρ ∈ ZeroWindow t) :
     ‖z - ρ‖ ≥ DeltaT t / 6 := by
-  simp only [ZeroWindow, mem_setOf_eq] at hρ
+  simp only [ZeroWindow, mem_ofPred_eq] at hρ
   have := abs_sub_abs_le_abs_sub t ρ.im; rw [abs_sub_comm] at this
   have ρImDiffBound : |ρ.im - t| ≤ 3 / 4 := by
     have h := Complex.abs_im_le_norm (ρ - (3 / 2 + I * t))
@@ -2639,7 +2639,7 @@ lemma LogDerivZetaUniformLogSquaredBoundStrip : ∃ (F : ℝ) (_ : F = E / 3)
       (fun z' hz' => (differentiableAt_riemannZeta hz').differentiableWithinAt)
       ((isOpen_ne).mem_nhds ?_)) (AnalyticAt.add (AnalyticAt.add analyticAt_id analyticAt_const)
       analyticAt_const))
-    simp only [ne_eq, Pi.add_apply, id_eq, mem_setOf_eq]
+    simp only [ne_eq, Pi.add_apply, id_eq, mem_ofPred_eq]
     by_contra h; rw [Complex.ext_iff] at h
     obtain ⟨_, hIm⟩ := h; simp only [add_im, div_ofNat_im, im_ofNat, zero_div, add_zero, mul_im,
       I_re, ofReal_im, mul_zero, I_im, ofReal_re, one_mul, zero_add, one_im] at hIm
@@ -2678,12 +2678,12 @@ lemma LogDerivZetaUniformLogSquaredBoundStrip : ∃ (F : ℝ) (_ : F = E / 3)
       gcongr
       rw [div_mul_eq_mul_div, le_div_iff₀ (Real.log_pos one_lt_ofNat)]
       exact mul_le_mul_of_nonneg_left (Real.log_le_log three_pos ht) (Real.log_nonneg d_gt_one.le)
-    · simp only [ZeroWindow, Finite.mem_toFinset, mem_setOf_eq, SetOfZeros, and_imp, rwr, hf, hg]
+    · simp only [ZeroWindow, Finite.mem_toFinset, mem_ofPred_eq, SetOfZeros, and_imp, rwr, hf, hg]
       ring_nf
       intro z hzZero hzBound
       simp only [_root_.mul_eq_zero, inv_eq_zero, zetaThreeHalfNonzero, or_false]
       exact ⟨hzBound, hzZero⟩
-    · simp only [SetOfZeros, Finite.mem_toFinset, mem_setOf_eq, ZeroWindow, add_sub_cancel_right,
+    · simp only [SetOfZeros, Finite.mem_toFinset, mem_ofPred_eq, ZeroWindow, add_sub_cancel_right,
         and_imp, rwr, hf, hg]
       ring_nf
       intro z hzBound hzZero
@@ -2691,7 +2691,7 @@ lemma LogDerivZetaUniformLogSquaredBoundStrip : ∃ (F : ℝ) (_ : F = E / 3)
       exact ⟨hzZero, hzBound⟩
     · simp only [Finite.mem_toFinset, implies_true, sub_add_cancel]
     · simp only [Finite.mem_toFinset, implies_true, add_sub_cancel_right]
-    · simp only [ZeroWindow, Finite.mem_toFinset, mem_setOf_eq, hf, hg, Nat.cast_inj, and_imp]
+    · simp only [ZeroWindow, Finite.mem_toFinset, mem_ofPred_eq, hf, hg, Nat.cast_inj, and_imp]
       intro z hzZero hzBound
       rw [analyticOrderNatAt_fun_div_const zetaThreeHalfNonzero]
       · simp only [add_assoc, analyticOrderNatAt_fun_comp_add_right, sub_add_cancel]
@@ -2699,7 +2699,7 @@ lemma LogDerivZetaUniformLogSquaredBoundStrip : ∃ (F : ℝ) (_ : F = E / 3)
           (fun z' hz' => (differentiableAt_riemannZeta hz').differentiableWithinAt)
           ((isOpen_ne).mem_nhds ?_))
           (AnalyticAt.add (AnalyticAt.add analyticAt_id analyticAt_const) analyticAt_const)
-        simp only [ne_eq, Pi.add_apply, id_eq, mem_setOf_eq]; ring_nf
+        simp only [ne_eq, Pi.add_apply, id_eq, mem_ofPred_eq]; ring_nf
         by_contra z1
         simp [z1] at hzBound; ring_nf at hzBound
         have h := Complex.abs_im_le_norm (-1 / 2 - I * t); simp only [sub_im, div_ofNat_im, neg_im,
